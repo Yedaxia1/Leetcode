@@ -584,6 +584,38 @@ public class Leetcode {
         return true;
     }
 
+    // # 872
+    public boolean leafSimilar(TreeNode root1, TreeNode root2) {
+        TreeNode cur = root1;
+        Stack<TreeNode> stack = new Stack<>();
+        Queue<Integer> queue = new LinkedList<>();
+        while (cur!=null || !stack.isEmpty()){
+            while (cur!=null){
+                stack.push(cur);
+                cur = cur.left;
+            }
+            cur = stack.pop();
+            if(cur.left==null && cur.right==null)
+                queue.add(cur.val);
+            cur = cur.right;
+        }
+
+        cur = root2;
+        while (cur!=null || !stack.isEmpty()){
+            while (cur!=null){
+                stack.push(cur);
+                cur = cur.left;
+            }
+            cur = stack.pop();
+            if(cur.left==null && cur.right==null)
+                if(queue.isEmpty() || cur.val!=queue.poll())
+                    return false;
+            cur = cur.right;
+        }
+        return queue.isEmpty()? true:false;
+    }
+
+
     // # 897
     public TreeNode increasingBST(TreeNode root) {
         TreeNode ans = new TreeNode();
@@ -678,6 +710,35 @@ public class Leetcode {
             first = ans[i+1];
         }
         return ans;
+    }
+
+    // # 1723
+    public int max_time = Integer.MAX_VALUE;
+    public int minimumTimeRequired(int[] jobs, int k) {
+        int[] work = new int[k];
+        Arrays.sort(jobs);
+        duigui(jobs, 0, k, work);
+        return max_time;
+    }
+
+    public void duigui(int[] jobs, int index, int k, int[] work_k){
+        if(index==jobs.length)
+        {
+            System.out.println(Arrays.toString(work_k));
+            if(Arrays.stream(work_k).max().getAsInt() < max_time)
+                max_time = Arrays.stream(work_k).max().getAsInt();
+            return;
+        }else {
+            if(Arrays.stream(work_k).max().getAsInt() + jobs[index] > max_time)
+                return;
+            for(int i=0;i<work_k.length;i++){
+                work_k[i] += jobs[index];
+                System.out.println(index + "--" + i);
+                duigui(jobs, index+1, k, work_k);
+                work_k[i] -= jobs[index];
+            }
+            return;
+        }
     }
 
 
