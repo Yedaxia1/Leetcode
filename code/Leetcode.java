@@ -741,5 +741,26 @@ public class Leetcode {
         }
     }
 
+    // # 1734
+    public int[] decode(int[] encoded) {
+        int[] ans = new int[encoded.length + 1];
+        int total = 0;
+        int odd = 0;
+        for(int i = 1;i <= encoded.length+1; i++)
+            total = total ^ i;
+
+        for(int i = 1; i<encoded.length; i+=2){
+            odd = odd ^ encoded[i];
+        }
+
+        int start = total ^ odd;
+
+        ans[0] = start;
+        for(int i=1;i<encoded.length+1;i++)
+            ans[i] = encoded[i-1] ^ ans[i-1];
+
+        return ans;
+    }
+
 
 }
