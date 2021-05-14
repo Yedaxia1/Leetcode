@@ -123,6 +123,49 @@ public class Leetcode {
         return ans;
     }
 
+    // # 12
+    public String intToRoman(int num) {
+        Map<Integer, String> trans_map = new HashMap<>();
+        trans_map.put(1, "I");
+        trans_map.put(5, "V");
+        trans_map.put(10, "X");
+        trans_map.put(50, "L");
+        trans_map.put(100, "C");
+        trans_map.put(500, "D");
+        trans_map.put(1000, "M");
+
+        trans_map.put(4, "IV");
+        trans_map.put(9, "IX");
+        trans_map.put(40, "XL");
+        trans_map.put(90, "XC");
+        trans_map.put(400, "CD");
+        trans_map.put(900, "CM");
+
+        StringBuffer ans = new StringBuffer();
+        int offset = 1;
+        while (num != 0){
+            int temp = (num % 10) * offset;
+            if(trans_map.keySet().contains(temp))
+                ans.insert(0, trans_map.get(temp));
+            else {
+                String temp_str = "";
+                if(temp / offset >= 5){
+                    temp_str = trans_map.get(5 * offset);
+                    temp -= 5 * offset;
+                }
+                //System.out.println(temp);
+                //System.out.println(trans_map.get(offset));
+                for(int i=offset;i<=temp;i+=offset)
+                    temp_str += trans_map.get(offset);
+                //System.out.println(temp_str);
+                ans.insert(0, temp_str);
+            }
+            offset *= 10;
+            num /= 10;
+        }
+        return ans.toString();
+    }
+
     // # 27
     public int removeElement(int[] nums, int val) {
         int ans = 0;
