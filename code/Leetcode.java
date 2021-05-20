@@ -542,6 +542,23 @@ public class Leetcode {
         return ans;
     }
 
+    // # 692
+    public List<String> topKFrequent(String[] words, int k) {
+        Map<String, Integer> map = new HashMap<>();
+        for (String s:words)
+            map.put(s, map.getOrDefault(s, 0)+1);
+        List<String> ans = new ArrayList<>();
+        for(String s:map.keySet())
+            ans.add(s);
+        Collections.sort(ans, new Comparator<String>() {
+            @Override
+            public int compare(String o1, String o2) {
+                return map.get(o1) == map.get(o2) ? o1.compareTo(o2):map.get(o2)-map.get(o1);
+            }
+        });
+        return ans.subList(0,k);
+    }
+
     // # 740
     public int deleteAndEarn(int[] nums) {
         int Maxvalue = Arrays.stream(nums).max().getAsInt();
@@ -803,6 +820,41 @@ public class Leetcode {
             ans[i] = encoded[i-1] ^ ans[i-1];
 
         return ans;
+    }
+
+    // # 1738
+    public int kthLargestValue(int[][] matrix, int k) {
+        int[][] ans_mrt = new int[matrix.length][matrix[0].length];
+        List<Integer> ans = new ArrayList<>();
+        ans_mrt[0][0] = matrix[0][0];
+        ans.add(ans_mrt[0][0]);
+
+        for (int i=1;i<matrix[0].length;i++){
+            ans_mrt[0][i] = ans_mrt[0][i-1] ^ matrix[0][i];
+            ans.add(ans_mrt[0][i]);
+        }
+
+        for(int i=1;i<matrix.length;i++){
+
+            ans_mrt[i][0] = ans_mrt[i-1][0] ^ matrix[i][0];
+            ans.add(ans_mrt[i][0]);
+            int temp = matrix[i][0];
+            for(int j=1;j<matrix[0].length;j++){
+                ans_mrt[i][j] = temp ^ ans_mrt[i-1][j] ^ matrix[i][j];
+                temp = temp ^ matrix[i][j];
+                ans.add(ans_mrt[i][j]);
+            }
+
+        }
+
+        Collections.sort(ans, new Comparator<Integer>() {
+            @Override
+            public int compare(Integer o1, Integer o2) {
+                return o2 - o1;
+            }
+        });
+        System.out.println(ans.toArray().toString());
+        return ans.get(k - 1);
     }
 
 
