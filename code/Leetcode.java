@@ -483,6 +483,27 @@ public class Leetcode {
         return false;
     }
 
+    // # 461
+    public int hammingDistance(int x, int y) {
+        int ans = 0;
+        String s1 = Integer.toBinaryString(x);
+        String s2 = Integer.toBinaryString(y);
+        if(s1.length() > s2.length()){
+            String temp = s1;
+            s1 = s2;
+            s2 = temp;
+        }
+        int len = s2.length()-s1.length();
+        for (int i=0;i<len;i++)
+            s1 = "0" + s1;
+
+        for (int i=0;i<s2.length();i++)
+            if(s1.charAt(i)!=s2.charAt(i))
+                ans++;
+        return ans;
+
+    }
+
     public boolean contain_num(int n, int[] stones){
         int left = 0;
         int right = stones.length-1;
@@ -775,6 +796,28 @@ public class Leetcode {
             ans = ans ^ (start + 2 * i);
         }
         return ans;
+    }
+
+    // # 1707
+    public int[] maximizeXor(int[] nums, int[][] queries) {
+        Arrays.sort(nums);
+        int[] ans = new int[queries.length];
+
+        for(int i=0;i<ans.length;i++){
+            int temp = Integer.MIN_VALUE;
+            for(int j:nums){
+                if(j > queries[i][1])
+                    break;
+                else {
+                    temp = Math.max(temp, queries[i][0] ^ j);
+                }
+            }
+            if(temp == Integer.MIN_VALUE)
+                ans[i] = -1;
+            else ans[i] = temp;
+        }
+        return ans;
+
     }
 
     // # 1720
