@@ -1,3 +1,5 @@
+import org.omg.PortableInterceptor.INACTIVE;
+
 import javax.persistence.criteria.CriteriaBuilder;
 import java.util.*;
 
@@ -504,6 +506,16 @@ public class Leetcode {
 
     }
 
+    // # 477
+    public int totalHammingDistance(int[] nums) {
+        int ans = 0;
+        for (int i=0;i<nums.length;i++)
+            for (int j=i+1;j<nums.length;j++)
+                ans += Integer.bitCount(nums[i] ^ nums[j]);
+
+        return ans;
+    }
+
     public boolean contain_num(int n, int[] stones){
         int left = 0;
         int right = stones.length-1;
@@ -787,6 +799,41 @@ public class Leetcode {
             }
         }
         return ans;
+    }
+
+    // # 1074
+    public int numSubmatrixSumTarget(int[][] matrix, int target) {
+        int ans = 0;
+        int[][] subSum = new int[matrix.length+1][matrix[0].length];
+
+        for (int i=0;i<matrix.length;i++){
+            for (int j=0;j<matrix[0].length;j++)
+                subSum[i+1][j] = subSum[i][j] + matrix[i][j];
+        }
+
+        for (int i=1;i<=matrix.length;i++){
+            for (int j=i;j<=matrix.length;j++){
+                int[] nums = new int[matrix[0].length];
+                for (int k=0;k<nums.length;k++)
+                    nums[k] = subSum[j][k] - subSum[i-1][k];
+                ans += countSumForTarget(nums, target);
+            }
+        }
+        return ans;
+    }
+
+    public int countSumForTarget(int[] nums, int target){
+        // System.out.println(Arrays.toString(nums));
+        Map<Integer, Integer> map = new HashMap<>();
+        map.put(0, 1);
+        int count=0, pre=0;
+        for(int i:nums){
+            pre += i;
+            if (map.keySet().contains(pre - target))
+                count += map.get(pre-target);
+            map.put(pre, map.getOrDefault(pre, 0) + 1);
+        }
+        return count;
     }
 
     // # 1486
