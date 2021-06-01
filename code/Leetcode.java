@@ -1,3 +1,4 @@
+import com.sun.java.swing.plaf.windows.WindowsEditorPaneUI;
 import org.omg.PortableInterceptor.INACTIVE;
 
 import javax.persistence.criteria.CriteriaBuilder;
@@ -485,6 +486,18 @@ public class Leetcode {
         return false;
     }
 
+    // # 342
+    public boolean isPowerOfFour(int n) {
+        if(n<=0) return false;
+        if (n==1) return true;
+        while (n>1){
+            if(n%4 == 0)
+                n /= 4;
+            else return false;
+        }
+        return true;
+    }
+
     // # 461
     public int hammingDistance(int x, int y) {
         int ans = 0;
@@ -961,6 +974,34 @@ public class Leetcode {
         });
         System.out.println(ans.toArray().toString());
         return ans.get(k - 1);
+    }
+
+    // # 1744
+    public boolean[] canEat(int[] candiesCount, int[][] queries) {
+        boolean[] ans = new boolean[queries.length];
+
+        long[] pre_sum = new long[candiesCount.length+1];
+        pre_sum[0] = 0;
+        for (int i=1;i<=candiesCount.length;i++)
+            pre_sum[i] = pre_sum[i-1] + candiesCount[i-1];
+        int index = 0;
+        for (int[] query:queries){
+            long right = (long)query[2] * (query[1] + 1);
+            long left = query[1] + 1;
+            //System.out.println(Math.max(pre_sum[query[0]]+1, left) + "---" + Math.min(pre_sum[query[0]+1], right));
+            if(!(left > pre_sum[query[0]+1] || right < pre_sum[query[0]]+1)){
+                ans[index++] = true;
+                //System.out.println("hhh");
+            }
+            else{
+                //System.out.println("xxx");
+                ans[index++] = false;
+            }
+//            System.out.println(Integer.MAX_VALUE);
+//            System.out.println(left + "---" + right);
+//            System.out.println(pre_sum[query[0]]+1 + "---" + pre_sum[query[0]+1]);
+        }
+        return ans;
     }
 
 
