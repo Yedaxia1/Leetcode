@@ -343,6 +343,58 @@ public class Leetcode {
         return ans;
     }
 
+    // # 160
+    public ListNode getIntersectionNode(ListNode headA, ListNode headB) {
+        // 力扣答案！！！
+//        if (headA == null || headB == null) {
+//            return null;
+//        }
+//        ListNode pA = headA, pB = headB;
+//        while (pA != pB) {
+//            pA = pA == null ? headB : pA.next;
+//            pB = pB == null ? headA : pB.next;
+//        }
+//        return pA;
+
+
+        if(headA==null || headB==null)
+            return null;
+        int len1=0,len2=0;
+
+        ListNode Temp = headA;
+        while (Temp!=null){
+            len1++;
+            Temp = Temp.next;
+        }
+        Temp = headB;
+        while (Temp!=null){
+            len2++;
+            Temp = Temp.next;
+        }
+        ListNode t1 = headA;
+        ListNode t2 = headB;
+        while (len1!=len2){
+            if(len1 > len2){
+                t1 = t1.next;
+                len1--;
+            }else {
+                t2 = t2.next;
+                len2--;
+            }
+        }
+
+        for(int i=0;i<len1;i++){
+            if (t1==t2)
+                return t1;
+            else {
+                t1 = t1.next;
+                t2 = t2.next;
+            }
+        }
+        return null;
+
+    }
+
     // # 179
     public String largestNumber(int[] nums) {
         if(nums.length==1)
@@ -390,6 +442,24 @@ public class Leetcode {
 
         return ans.toString();
 
+    }
+
+    // # 203
+    public ListNode removeElements(ListNode head, int val) {
+        ListNode hair = new ListNode(-1);
+        hair.next = head;
+        ListNode pre = hair;
+        ListNode cur = pre.next;
+        while (cur!=null){
+            if(cur.val==val){
+                pre.next = cur.next;
+                cur = cur.next;
+            }else {
+                pre = cur;
+                cur = cur.next;
+            }
+        }
+        return hair.next;
     }
 
     // # 213
@@ -543,6 +613,40 @@ public class Leetcode {
             else right = mid - 1;
         }
         return stones[right]==n? true:false;
+    }
+
+    // # 523
+    public boolean checkSubarraySum(int[] nums, int k) {
+        if(nums.length < 2)
+            return false;
+        int pre = 0;
+        HashMap<Integer, Integer> hashMap = new HashMap<>();
+        hashMap.put(pre % k, -1);
+        for (int i = 0; i < nums.length; i++) {
+            pre += nums[i];
+            if (hashMap.containsKey(pre % k)) {
+                if (i - hashMap.get(pre % k) >= 2)
+                    return true;
+            } else hashMap.put(pre % k, i);
+        }
+        return false;
+    }
+
+    // # 525
+    public int findMaxLength(int[] nums) {
+        HashMap<Integer, Integer> hashMap = new HashMap<>();
+        int ans = 0;
+        int pre = 0;
+        hashMap.put(0, -1);
+        for (int i=0;i<nums.length;i++){
+            if (nums[i]==0)
+                nums[i] = -1;
+            pre += nums[i];
+            if (hashMap.containsKey(pre)){
+                ans = Math.max(ans, i-hashMap.get(pre));
+            }else hashMap.put(pre, i);
+        }
+        return ans;
     }
 
     // # 554
